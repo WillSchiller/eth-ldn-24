@@ -7,9 +7,9 @@ import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 contract BalanceController is Ownable(msg.sender){
     struct TargetBalance {
         uint256 target; // the target wallet balance
-        uint256 buffer; // the amount over or under the target balance that is acceptable
-        uint256 lowerBound; 
+        uint256 buffer; // % margin of error used to calculate the upper and lower bounds
         uint256 upperBound;
+        uint256 lowerBound;
     }
     TargetBalance public targetBalance;
     address public delayModuleAddress;
@@ -56,6 +56,7 @@ contract BalanceController is Ownable(msg.sender){
         }
 
         // swap yeild barring token to EURe toto
+    
        
     }
 
