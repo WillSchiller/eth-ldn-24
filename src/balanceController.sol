@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
+import'@openzeppelin/contracts/access/Ownable.sol';
 
-contract BalanceController  is Ownable{
-
+contract BalanceController is Ownable(msg.sender){
     struct TargetBalance {
         uint256 target; // the target wallet balance
         uint256 buffer; // the amount over or under the target balance that is acceptable
@@ -16,7 +15,6 @@ contract BalanceController  is Ownable{
 
     error targetTopupOutsideOfRange();
     constructor(uint256 _initialTargetBalance, address _delayModuleAddress) {
-        owner = msg.sender;
         setTargetBalance(_initialTargetBalance, 2);
         delayModuleAddress = _delayModuleAddress;
     }
@@ -29,14 +27,11 @@ contract BalanceController  is Ownable{
         targetBalance.upperBound = _targetBalance + bufferAmount;
     }
 
-    function topUpBalance(uint256 _amoun) public { //amount
-        // amount + balance of this contract must target balance within 3%
-        if (_amount > targetBalance ) {
-            revert topupTooHigh();
-        }
-        // customs errors TODO
-        // topup must be within 10% of target balance after tx
-
+    function topUpBalance(uint256 _amount) public { //amount
+        // amount + balance of this contract must be target balance within 2%
+        // if not, revert
+        // send swap tx to delay module
+        uint256 amount = _amount;
     }
 
 
