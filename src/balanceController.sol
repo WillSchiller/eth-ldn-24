@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import {Ownabale} from '@openzeppelin/contracts/access/Ownable.sol';
+import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract BalanceController is Ownable(msg.sender){
@@ -13,13 +13,21 @@ contract BalanceController is Ownable(msg.sender){
     }
     TargetBalance public targetBalance;
     address public delayModuleAddress;
+    address public SafeSddress;
     IERC20 public gnosisPayToken;
 
     error targetTopupOutsideOfRange();
-    constructor(uint256 _initialTargetBalance, address _delayModuleAddress, address _gnosisPayTokenAddress) {
+    error topUpTooSmall();
+
+    constructor(
+        uint256 _initialTargetBalance, 
+        address _delayModuleAddress, 
+        address _gnosisPayTokenAddress,
+        address _safeAddress ) {
         setTargetBalance(_initialTargetBalance, 2);
         delayModuleAddress = _delayModuleAddress;
         gnosisPayToken = IERC20(_gnosisPayTokenAddress);
+        SafeSddress = _safeAddress;
     }
 
     function setTargetBalance(uint256 _targetBalance, uint256 buffer) public onlyOwner {
@@ -30,21 +38,25 @@ contract BalanceController is Ownable(msg.sender){
         targetBalance.upperBound = _targetBalance + bufferAmount;
     }
 
-    function ThisEUReBalance() public view returns (uint256) {
+    function thisEUReBalance() public view returns (uint256) {
         //todo update to EURe balance
-        return address(this).balance;
+        return gnosisPayToken.balanceOf(SafeSddress);
     }
 
-    function topUpBalance(uint256 _amount) public { //amount
-        if (_amount < targetBalance.lowerBound || _amount > targetBalance.upperBound) {
+    function topUpBalance(uint256 _amount) public { 
+        uint256 currentBalance = thisEUReBalance();
+        uint256 newBalance = currentBalance + _amount;
+        // Check newBalance will be within the target balance range
+        if (newBalance + currentBalance < targetBalance.lowerBound || newBalance > targetBalance.upperBound) {
             revert targetTopupOutsideOfRange();
         }
-        if _amount <= 
-        // amount + balance of this contract must be target balance within 2%
-        //and amount must be more than range
-        // if not, revert
-        // send swap tx to delay module
-        uint256 amount = _amount;
+        // Prevent small topups or sybill attack
+        if (_amount <= targetBalance.buffer) {
+            revert topUpTooSmall();
+        }
+
+        // swap yeild barring token to EURe toto
+       
     }
 
 
