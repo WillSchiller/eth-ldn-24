@@ -4,6 +4,7 @@ pragma solidity 0.8.20;
 import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import {Delay} from '@zodiac/contracts/Delay.sol';
+import {Enum} from '@gnosis.pm/safe-contracts/contracts/common/Enum.sol';
 
 contract BalanceController is Ownable(msg.sender){
     struct TargetBalance {
@@ -60,16 +61,15 @@ contract BalanceController is Ownable(msg.sender){
 
     // https://github.com/gnosisguild/zodiac-modifier-delay/blob/main/contracts/Delay.sol
     // Value and Operation should be zero
-    function execTransaction(address to, uint256 value, bytes memory data, uint256 operation) public onlyOwner {
+    function execTransaction(address to, uint256 value, bytes memory data, Enum.Operation operation) public onlyOwner {
         Delay delayModule = Delay(delayModuleAddress);
-        delayModule.scheduleTransaction(address(this), value, data, eta);
+        delayModule.execTransactionFromModule(address(this), value, data, operation);
     }
     
        
-    }
-
-
-
-
-
 }
+
+
+
+
+
