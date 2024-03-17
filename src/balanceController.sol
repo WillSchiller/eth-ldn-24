@@ -54,9 +54,16 @@ contract BalanceController is Ownable(msg.sender){
         // Prevent small topups or sybill attack
         if (_amount <= targetBalance.buffer) {
             revert topUpTooSmall();
+            //todo swap yeild barring token to EURe
         }
+    }
 
-        // swap yeild barring token to EURe toto
+    // https://github.com/gnosisguild/zodiac-modifier-delay/blob/main/contracts/Delay.sol
+    // Value and Operation should be zero
+    function execTransaction(address to, uint256 value, bytes memory data, uint256 operation) public onlyOwner {
+        Delay delayModule = Delay(delayModuleAddress);
+        delayModule.scheduleTransaction(address(this), value, data, eta);
+    }
     
        
     }
