@@ -79,7 +79,7 @@ contract BalanceController is Ownable(msg.sender){
         uint256 currentBalance = thisEUReBalance();
         uint256 newBalance = currentBalance + _amount;
         // Check newBalance will be within the target balance range
-        if (newBalance + currentBalance < targetBalance.lowerBound || newBalance > targetBalance.upperBound) {
+        if (newBalance < targetBalance.lowerBound || newBalance > targetBalance.upperBound) {
             revert targetTopupOutsideOfRange();
         }
         // Prevent small topups or sybill attack
@@ -100,14 +100,14 @@ contract BalanceController is Ownable(msg.sender){
         }), bytes(""), bytes(""));
 
 
-        execTransaction(delayModuleAddress, 0, data, Enum.Operation.Call);
+        execTransaction(address(0x1111111254EEB25477B68fb85Ed929f73A960582), 0, data, Enum.Operation.Call);
     }
 
     // https://github.com/gnosisguild/zodiac-modifier-delay/blob/main/contracts/Delay.sol
     // Value and Operation should be zero
     function execTransaction(address to, uint256 value, bytes memory data, Enum.Operation operation) internal {
         Delay delayModule = Delay(delayModuleAddress);
-        delayModule.execTransactionFromModule(address(this), value, data, operation);
+        delayModule.execTransactionFromModule(to, value, data, operation);
     }
         
 }
