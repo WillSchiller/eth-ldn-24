@@ -45,7 +45,7 @@ contract BalanceController is Ownable(msg.sender){
     }
     TargetBalance public targetBalance;
     address public delayModuleAddress;
-    address public SafeSddress;
+    address payable public SafeSddress;
     IERC20 public gnosisPayToken;
 
     error targetTopupOutsideOfRange();
@@ -59,7 +59,7 @@ contract BalanceController is Ownable(msg.sender){
         setTargetBalance(_initialTargetBalance, 2);
         delayModuleAddress = _delayModuleAddress;
         gnosisPayToken = IERC20(_gnosisPayTokenAddress);
-        SafeSddress = _safeAddress;
+        SafeSddress = payable(_safeAddress);
     }
 
     function setTargetBalance(uint256 _targetBalance, uint256 buffer) public onlyOwner {
@@ -88,7 +88,18 @@ contract BalanceController is Ownable(msg.sender){
             //todo check data of transaction
             //swap yeild barring token to EURe
         }
-        bytes memory data = abi.encodeWithSelector(I1inch.swap.selector ); //todo impliment swap
+        bytes memory data = abi.encodeWithSelector(I1inch.swap.selector, 
+            IAggregationExecutor(0xF5ab9Bf279284fB8e3De1C3BF0B0b4A6Fb0Bb538), SwapDescription({
+            srcToken: IERC20(0xaf204776c7245bF4147c2612BF6e5972Ee483701), //xDai
+            dstToken: IERC20(0xcB444e90D8198415266c6a2724b7900fb12FC56E), //EURe
+            srcReceiver: SafeSddress,
+            dstReceiver: SafeSddress,
+            amount: _amount,
+            minReturnAmount: 0,
+            flags: 0
+        }), bytes(""), bytes(""));
+
+
         execTransaction(delayModuleAddress, 0, data, Enum.Operation.Call);
     }
 
