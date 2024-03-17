@@ -6,6 +6,36 @@ import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import {Delay} from '@zodiac/contracts/Delay.sol';
 import {Enum} from '@gnosis.pm/safe-contracts/contracts/common/Enum.sol';
 
+interface IAggregationExecutor {
+    /// @notice propagates information about original msg.sender and executes arbitrary data
+    function execute(address msgSender) external payable;  // 0x4b64e492
+}
+
+struct SwapDescription {
+    IERC20 srcToken;
+    IERC20 dstToken;
+    address payable srcReceiver;
+    address payable dstReceiver;
+    uint256 amount;
+    uint256 minReturnAmount;
+    uint256 flags;
+}
+
+interface I1inch {
+     function swap(
+        IAggregationExecutor executor,
+        SwapDescription calldata desc,
+        bytes calldata permit,
+        bytes calldata data
+    )
+        external
+        payable
+        returns (
+            uint256 returnAmount,
+            uint256 spentAmount
+        );
+}
+
 contract BalanceController is Ownable(msg.sender){
     struct TargetBalance {
         uint256 target; // the target wallet balance
@@ -55,18 +85,20 @@ contract BalanceController is Ownable(msg.sender){
         // Prevent small topups or sybill attack
         if (_amount <= targetBalance.buffer) {
             revert topUpTooSmall();
-            //todo swap yeild barring token to EURe
+            //todo check data of transaction
+            //swap yeild barring token to EURe
         }
+        bytes memory data = abi.encodeWithSelector(I1inch.swap.selector ); //todo impliment swap
+        execTransaction(delayModuleAddress, 0, data, Enum.Operation.Call);
     }
 
     // https://github.com/gnosisguild/zodiac-modifier-delay/blob/main/contracts/Delay.sol
     // Value and Operation should be zero
-    function execTransaction(address to, uint256 value, bytes memory data, Enum.Operation operation) public onlyOwner {
+    function execTransaction(address to, uint256 value, bytes memory data, Enum.Operation operation) internal {
         Delay delayModule = Delay(delayModuleAddress);
         delayModule.execTransactionFromModule(address(this), value, data, operation);
     }
-    
-       
+        
 }
 
 
