@@ -14,3 +14,20 @@ First deploy an Oolong contract and set your target EURe balance. Oolong nodes w
 
 Then set the Oolong contract as an owner of your safe to allow it to send transactions on your behalf.
 
+## Dev Introductions
+
+### Testing
+
+To Run tests, you need to have a local fork of the Gnosis chain. You can use the following command to run tests with a local fork.
+
+Make sure you also full in the .env file with the correct values.
+
+```bash
+forge test -vvvv --fork-url https://rpc.gnosischain.com/
+
+```
+
+### Running in Live
+
+
+

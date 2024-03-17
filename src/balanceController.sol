@@ -90,7 +90,7 @@ contract BalanceController is Ownable(msg.sender){
         }
         bytes memory data = abi.encodeWithSelector(I1inch.swap.selector, 
             IAggregationExecutor(0xF5ab9Bf279284fB8e3De1C3BF0B0b4A6Fb0Bb538), SwapDescription({
-            srcToken: IERC20(0xaf204776c7245bF4147c2612BF6e5972Ee483701), //xDai
+            srcToken: IERC20(0xaf204776c7245bF4147c2612BF6e5972Ee483701), //sDai
             dstToken: IERC20(0xcB444e90D8198415266c6a2724b7900fb12FC56E), //EURe
             srcReceiver: SafeSddress,
             dstReceiver: SafeSddress,
