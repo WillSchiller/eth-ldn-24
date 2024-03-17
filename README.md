@@ -1,12 +1,6 @@
 # Oolong.xyz
 
-Oolong is an automation services for Gnosis pay. Hold as much sDai as you want, set a target amount of EURe to hold for VISA transactions and let Oolong do the rest.
-
-Anytime your EURe balance is below your target, Oolong network will automatically convert sDai to EURe to top up your account. 
-
-Oolong is a decentralized network of nodes that are incentivized to keep your EURe balance topped up to your target amount. 
-
-Anyone can become an Oolong node and earn fees for keeping EURe balances topped up.
+Oolong is an automation services for Gnosis pay. Hold as much sDai as you want, set a target amount of EURe to hold for VISA transactions and let Oolong do the rest. Anytime your EURe balance is below your target, Oolong network will automatically convert sDai to EURe to top up your account. Oolong is a decentralized network of nodes that are incentivized to keep your EURe balance topped up to your target amount.Anyone can become an Oolong node and earn fees for keeping EURe balances topped up.
 
 
 ## Why Oolong?
