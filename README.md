@@ -1,66 +1,16 @@
-## Foundry
+## Oolong.xyz
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Oolong is an automation services for Gnosis pay. Hold as much sDai as you want, set a target amount of EURe to hold for VISA transactions and let Oolong do the rest.
 
-Foundry consists of:
+Anytime your EURe balance is below your target, Oolong network will automatically convert sDai to EURe to top up your account. 
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+Oolong is a decentralized network of nodes that are incentivized to keep your EURe balance topped up to your target amount. 
 
-## Documentation
+Anyone can become an Oolong node and earn fees for keeping EURe balances topped up.
 
-https://book.getfoundry.sh/
+## How it works
 
-## Usage
+First deploy an Oolong contract and set your target EURe balance. Oolong nodes will monitor your SAFE account and top up your EURe balance to your target amount whenever you send. Oolong network takes a small fee for this service. Split 50/50 between the node and the Oolong network. 
 
-### Build
+Then set the Oolong contract as an owner of your safe to allow it to send transactions on your behalf.
 
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
